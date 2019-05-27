@@ -1,6 +1,7 @@
 # Javascript 整洁代码-最佳实践
 
 作者：Milos Protic
+
 原文地址：`https://devinduct.com/blogpost/22/javascript-clean-code-best-practices`
 
 ## 简介
