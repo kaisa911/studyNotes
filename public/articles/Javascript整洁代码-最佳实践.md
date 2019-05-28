@@ -12,10 +12,12 @@
 
 问问你自己，多少次当你第一印象是下面“WTF”的问题之一时，你会继续完成别人的工作？
 
-"WTF is that?"
-"WTF did you do here?"
+"WTF is that?"  
+"WTF did you do here?"  
 "WTF is this for?"
+
 这里有一张非常火的图，可以解释上面的问题。
+
 ![图图图](https://github.com/kaisa911/studyNotes/blob/master/public/image/wtfexpress.jfif?raw=true)
 
 罗伯特·C·马丁（鲍勃大叔）的一句引言，应该能让你思考你的方式。
