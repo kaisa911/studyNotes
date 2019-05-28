@@ -1,4 +1,4 @@
-# Javascript 整洁代码-最佳实践
+# JavaScript 整洁代码-最佳实践
 
 作者：Milos Protic
 
@@ -572,6 +572,7 @@ const person = new Person('John')
 关于死代码，正如它名字所说的。它代码中的代码没有做任何事情，因为在某些开发阶段，你已经决定不再使用它了。你应该在代码库中搜索并删除所有不需要的函数和代码块。我可以给你的建议是，一旦你决定不再需要它，那就删除它。以后你可能会忘记它的用途。
 
 这是一张图片，展示了你在那时的感受。
+
 ![tututu](https://github.com/kaisa911/studyNotes/blob/master/public/image/jscleancode2.png?raw=true)
 
 ## 总结
