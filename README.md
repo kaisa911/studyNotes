@@ -2,7 +2,7 @@
 
 一些简单的工作~
 
-## 文章列表：
+## 分享学习
 
 - [你好，区块链](https://github.com/kaisa911/studyNotes/issues/1)
 - [react v.16 的新特性学习](https://github.com/kaisa911/studyNotes/issues/2)
