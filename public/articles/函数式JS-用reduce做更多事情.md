@@ -286,3 +286,53 @@ console.log(mostRecent);
 ```
 
 在这个版本中，我们只遍历一次数组。但如果人员名单总是很小的话，这可能不会有所改善。我的建议是默认使用.filter()和.map()。如果您确定内存使用或性能问题，请查看此类替代方案。
+
+### 2.5 按顺序执行异步操作
+
+另一件我们可以用.reduce()做的事情，是让 promise 按顺序执行（与平行相反）<sup>[4]</sup>。如果您对 API 请求有速率限制，或者您需要将每个 promise 的结果传递给下一个 promise，这可能很方便。举个例子，假设我们想在 peopleArr 数组中为每个人获取消息。
+
+```js
+function fetchMessages(username) {
+  return fetch(`https://example.com/api/messages/${username}`).then(response =>
+    response.json()
+  );
+}
+
+function getUsername(person) {
+  return person.username;
+}
+
+async function chainedFetchMessages(p, username) {
+  // In this function, p is a promise. We wait for it to finish,
+  // then run fetchMessages().
+  const obj = await p;
+  const data = await fetchMessages(username);
+  return { ...obj, [username]: data };
+}
+
+const msgObj = peopleArr
+  .map(getUsername)
+  .reduce(chainedFetchMessages, Promise.resolve({}))
+  .then(console.log);
+// ⦘ {glestrade: [ … ], mholmes: [ … ], iadler: [ … ]}
+```
+
+请注意： 要使这个生效，我们要在使用 Promise.resolve()时候给它传一个初始值。它会立即执行（这就是 Promise.resolve()所做的）。然后我们的第一个 API 调用将立即运行。
+
+## 3 为什么我们不经常看到 reduce 呢？
+
+所以，我们已经看到了一些你可以用.reduce()做的有趣的事情。希望能够在您自己的项目里就如何将它提出一些想法。但是，既然.reduce()如此强大和灵活，那么为什么我们不经常看到它呢？具有讽刺是，它的灵活性和强大功问题是，你可以做很多不同的事情，减少它会给你更少的信息。 map()，.filter()和.flatMap()等方法更具体，灵活性更低。但他们告诉我们更多关于作者的意图。我们说这使他们更具表现力。所以通常使用更具表现力的方法更好，而不是使用 reduce 来解决所有问题。
+
+## 4 对你 我的朋友
+
+既然你已经看到了关于如何使用.reduce()的一些想法，为什么不试一试呢？如果你这样做，或者如果你发现我没有写过的新颖用法，请务必告诉我。我很想听听它。
+
+## 5 附录
+
+1、[Tweet by @JS_Cheerleader, 15 May 2019](https://twitter.com/JS_Cheerleader/status/1128420687712886784)
+
+2、If you [look at the .reduce() documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce), you will see that the reducer takes up to four parameters. But only the accumulator and the arrayElement are required. I’ve left them out in the interest of keeping things simple. It can confuse people to include too much detail.
+
+3、Some readers might point out that we could get a performance gain by mutating the accumulator. That is, we could change the object, instead of using the spread operator to create a new object every time. I code it this way because I want to keep in the habit of avoiding mutation. If it proved to be an actual bottleneck in production code, then I would change it.
+
+4、If you'd like to know how to run Promises in parallel, check out [How to run async JavaScript functions in sequence or parallel](https://jrsinclair.com/articles/2019/how-to-run-async-js-in-parallel-or-sequential/).
