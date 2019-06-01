@@ -14,7 +14,8 @@ Reduce 方法就是 数组迭代器 的瑞士军刀，它真的很强大。它�
 
 ## 1 为什么 reduce()会给人们带来这么多麻烦？
 
-我对此有一个理论。我认为有两个主要原因会导致这么多麻烦。首先，我们在教.reduce()之前倾向于教人们学习.map()和.filter()。但.reduce()的函数签名与它们是不同的。习惯于初始值的想法是一个非常重要的步骤。其次 reducer 函数也有不同的签名。它需要一个累加器值以及当前数组元素。所以学习.reduce()可能很棘手，因为它与.map()和.filter()有很大的不同。而且这些也不能避免。但我认为还有另一个因素在起作用。  
+我对此有一个理论。我认为有两个主要原因会导致这么多麻烦。首先，我们在教.reduce()之前倾向于教人们学习.map()和.filter()。但.reduce()的函数签名与它们是不同的。习惯于初始值的想法是一个非常重要的步骤。其次 reducer 函数也有不同的签名。它需要一个累加器值以及当前数组元素。所以学习.reduce()可能很棘手，因为它与.map()和.filter()有很大的不同。而且这些也不能避免。但我认为还有另一个因素在起作用。
+
 第二点是关于我们如何教别人学习 .reduce() 函数,像下面教程给出的例子也很常见：
 
 ```js
@@ -37,7 +38,8 @@ console.log('The product total is:', product);
 // ⦘ The product total is: 24
 ```
 
-当然，我说这些不是为了让谁感到羞愧。 MDN 文档使用这种示例。哎呀，我甚至自己这样做过。我们这样做是有充分理由的。像 add()和 multiply()这样的函数很容易理解。但不幸的是，它们有点过于简单。使用 add()，无论是 `b + a` 还是`a + b` 都无关紧要。同样适用于乘法。 `a * b` 与 `b * a` 相同。这就像你期望的那样。但麻烦的是，这使得更难以看到 reducer 函数发生了什么。  
+当然，我说这些不是为了让谁感到羞愧。 MDN 文档使用这种示例。哎呀，我甚至自己这样做过。我们这样做是有充分理由的。像 add()和 multiply()这样的函数很容易理解。但不幸的是，它们有点过于简单。使用 add()，无论是 `b + a` 还是`a + b` 都无关紧要。同样适用于乘法。 `a * b` 与 `b * a` 相同。这就像你期望的那样。但麻烦的是，这使得更难以看到 reducer 函数发生了什么。
+
 reducer 函数是我们传递给.reduce()的第一个参数。它的签名看起来像这样<sup>[2]</sup>:
 
 ```js
@@ -71,7 +73,7 @@ console.log(nums.reduce(fizzBuzzReducer, ''));
 
 那么，我们可以做些什么有趣的事情呢？我在这里列出了五个不涉及将数字相加的内容：  
 1、将数组转换为对象;  
-2、展开更大的阵列;  
+2、展开更大的数组;  
 3、在一次遍历中进行两次计算;  
 4、将映射和过滤组合成一个通道;  
 5、按顺序运行异步函数
@@ -138,3 +140,94 @@ console.log(peopleObj);
 //     }
 // }
 ```
+
+在这个版本中，我将用户名留作了对象的一部分。但是通过一个小的调整你可以删除它（如果需要的话）。
+
+### 2.2 把小数组展开成大的数组
+
+通常，我们将.reduce()视为获取许多事物的列表并将其减少到单个值。但是没有理由单个值不能成为一个数组。并且也没有规则说数组必须小于原始数组。因此，我们可以使用.reduce()将短数组转换为更长的数组。
+
+您可以很方便在从文本文件中读取数据，这是一个例子。想象一下，我们已经将一堆纯文本行读入数组中。我们想用逗号分隔每一行，并有一个大的名单。
+
+```js
+const fileLines = [
+  'Inspector Algar,Inspector Bardle,Mr. Barker,Inspector Barton',
+  'Inspector Baynes,Inspector Bradstreet,Inspector Sam Brown',
+  'Monsieur Dubugue,Birdy Edwards,Inspector Forbes,Inspector Forrester',
+  'Inspector Gregory,Inspector Tobias Gregson,Inspector Hill',
+  'Inspector Stanley Hopkins,Inspector Athelney Jones'
+];
+
+function splitLineReducer(acc, line) {
+  return acc.concat(line.split(/,/g));
+}
+const investigators = fileLines.reduce(splitLineReducer, []);
+console.log(investigators);
+// ⦘ [
+//   "Inspector Algar",
+//   "Inspector Bardle",
+//   "Mr. Barker",
+//   "Inspector Barton",
+//   "Inspector Baynes",
+//   "Inspector Bradstreet",
+//   "Inspector Sam Brown",
+//   "Monsieur Dubugue",
+//   "Birdy Edwards",
+//   "Inspector Forbes",
+//   "Inspector Forrester",
+//   "Inspector Gregory",
+//   "Inspector Tobias Gregson",
+//   "Inspector Hill",
+//   "Inspector Stanley Hopkins",
+//   "Inspector Athelney Jones"
+// ]
+```
+
+我们从长度为 5 的数组开始，最后得到一个长度为 16 的数组。
+
+你可能会看到我写的 [_Civilised Guide to JavaScript Array Methods_](https://jrsinclair.com/javascript-array-methods-cheat-sheet)。如果你正在关注这个，你可能已经注意到我推荐.flatMap()用于这种情况。所以，也许这个并不算数。但是，您可能还注意到.flatMap()在 Internet Explorer 或 Edge 中不可用。因此，我们可以使用.reduce()来创建我们自己的 flatMap()函数。
+
+```js
+function flatMap(f, arr) {
+  const reducer = (acc, item) => acc.concat(f(item));
+  return arr.reduce(reducer, []);
+}
+
+const investigators = flatMap(x => x.split(','), fileLines);
+console.log(investigators);
+```
+
+所以，.reduce()可以帮助我们从短数组获取长数组。但它也可以在缺少的数组方法的时候代替那些方法。
+
+### 2.3 在一次遍历中进行两次计算
+
+有时我们需要根据单个数组进行两次计算。例如，我们可能想要计算数字列表的最大值和最小值。我们可以这样做：
+
+```js
+const readings = [0.3, 1.2, 3.4, 0.2, 3.2, 5.5, 0.4];
+const maxReading = readings.reduce((x, y) => Math.max(x, y), Number.MIN_VALUE);
+const minReading = readings.reduce((x, y) => Math.min(x, y), Number.MAX_VALUE);
+console.log({ minReading, maxReading });
+// ⦘ {minReading: 0.2, maxReading: 5.5}
+```
+
+这需要遍历我们的数组两次。但是，有时我们可能不想这样做。由于.reduce()允许我们返回任何我们想要的类型，因此我们不必返回数字。我们可以将两个值编码到一个对象中。然后我们可以在每次迭代时进行两次计算，并且只遍历数组一次：
+
+```js
+const readings = [0.3, 1.2, 3.4, 0.2, 3.2, 5.5, 0.4];
+function minMaxReducer(acc, reading) {
+  return {
+    minReading: Math.min(acc.minReading, reading),
+    maxReading: Math.max(acc.maxReading, reading)
+  };
+}
+const initMinMax = {
+  minReading: Number.MAX_VALUE,
+  maxReading: Number.MIN_VALUE
+};
+const minMax = readings.reduce(minMaxReducer, initMinMax);
+console.log(minMax);
+// ⦘ {minReading: 0.2, maxReading: 5.5}
+```
+
+这个特殊例子的问题在于我们并没有真正提升性能。我们最终仍然执行相同数量的计算。但是，有些情况下它可能会产生真正的差异。例如，如果我们要组合.map()和.filter()操作......
