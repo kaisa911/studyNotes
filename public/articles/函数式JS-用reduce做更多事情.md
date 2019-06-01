@@ -75,7 +75,7 @@ console.log(nums.reduce(fizzBuzzReducer, ''));
 1、将数组转换为对象;  
 2、展开更大的数组;  
 3、在一次遍历中进行两次计算;  
-4、将映射和过滤组合成一个通道;  
+4、将 map 和 filter 组合在一次操作;  
 5、按顺序运行异步函数
 
 ### 2.1 将数组转换为对象
@@ -231,3 +231,58 @@ console.log(minMax);
 ```
 
 这个特殊例子的问题在于我们并没有真正提升性能。我们最终仍然执行相同数量的计算。但是，有些情况下它可能会产生真正的差异。例如，如果我们要组合.map()和.filter()操作......
+
+### 2.4 将 map 和 filter 组合在一次操作
+
+想象一下，我们之前有同样的 peopleArr。我们希望找到最近的登录，不包括没有电子邮件地址的人。一种方法是使用三个单独的操作：
+
+1、过滤掉没有电子邮件的条目;  
+2、然后 提取 lastSeen 属性;  
+3、最后 找到最大值。
+
+将它们放在一起看起来像这样：
+
+```js
+function notEmptyEmail(x) {
+  return x.email !== null && x.email !== undefined;
+}
+
+function getLastSeen(x) {
+  return x.lastSeen;
+}
+
+function greater(a, b) {
+  return a > b ? a : b;
+}
+
+const peopleWithEmail = peopleArr.filter(notEmptyEmail);
+const lastSeenDates = peopleWithEmail.map(getLastSeen);
+const mostRecent = lastSeenDates.reduce(greater, '');
+
+console.log(mostRecent);
+// ⦘ 2019-05-13T11:07:22+00:00
+```
+
+现在，这段代码有着完美的可读性，并且正确运行。对于样本数据，它很好。但是如果我们有一个庞大的数组，那么我们就有可能开始遇到内存问题。这是因为我们用一个变量来存储每个中间数组。如果我们修改我们的 reducer 回调，那么我们可以一次完成所有事情：
+
+```js
+function notEmptyEmail(x) {
+  return x.email !== null && x.email !== undefined;
+}
+
+function greater(a, b) {
+  return a > b ? a : b;
+}
+function notEmptyMostRecent(currentRecent, person) {
+  return notEmptyEmail(person)
+    ? greater(currentRecent, person.lastSeen)
+    : currentRecent;
+}
+
+const mostRecent = peopleArr.reduce(notEmptyMostRecent, '');
+
+console.log(mostRecent);
+// ⦘ 2019-05-13T11:07:22+00:00
+```
+
+在这个版本中，我们只遍历一次数组。但如果人员名单总是很小的话，这可能不会有所改善。我的建议是默认使用.filter()和.map()。如果您确定内存使用或性能问题，请查看此类替代方案。
