@@ -89,22 +89,22 @@ const peopleArr = [
     displayname: 'Inspector Lestrade',
     email: 'glestrade@met.police.uk',
     authHash: 'bdbf9920f42242defd9a7f76451f4f1d',
-    lastSeen: '2019-05-13T11:07:22+00:00'
+    lastSeen: '2019-05-13T11:07:22+00:00',
   },
   {
     username: 'mholmes',
     displayname: 'Mycroft Holmes',
     email: 'mholmes@gov.uk',
     authHash: 'b4d04ad5c4c6483cfea030ff4e7c70bc',
-    lastSeen: '2019-05-10T11:21:36+00:00'
+    lastSeen: '2019-05-10T11:21:36+00:00',
   },
   {
     username: 'iadler',
     displayname: 'Irene Adler',
     email: null,
     authHash: '319d55944f13760af0a07bf24bd1de28',
-    lastSeen: '2019-05-17T11:12:12+00:00'
-  }
+    lastSeen: '2019-05-17T11:12:12+00:00',
+  },
 ];
 ```
 
@@ -155,7 +155,7 @@ const fileLines = [
   'Inspector Baynes,Inspector Bradstreet,Inspector Sam Brown',
   'Monsieur Dubugue,Birdy Edwards,Inspector Forbes,Inspector Forrester',
   'Inspector Gregory,Inspector Tobias Gregson,Inspector Hill',
-  'Inspector Stanley Hopkins,Inspector Athelney Jones'
+  'Inspector Stanley Hopkins,Inspector Athelney Jones',
 ];
 
 function splitLineReducer(acc, line) {
@@ -218,12 +218,12 @@ const readings = [0.3, 1.2, 3.4, 0.2, 3.2, 5.5, 0.4];
 function minMaxReducer(acc, reading) {
   return {
     minReading: Math.min(acc.minReading, reading),
-    maxReading: Math.max(acc.maxReading, reading)
+    maxReading: Math.max(acc.maxReading, reading),
   };
 }
 const initMinMax = {
   minReading: Number.MAX_VALUE,
-  maxReading: Number.MIN_VALUE
+  maxReading: Number.MIN_VALUE,
 };
 const minMax = readings.reduce(minMaxReducer, initMinMax);
 console.log(minMax);
@@ -274,9 +274,7 @@ function greater(a, b) {
   return a > b ? a : b;
 }
 function notEmptyMostRecent(currentRecent, person) {
-  return notEmptyEmail(person)
-    ? greater(currentRecent, person.lastSeen)
-    : currentRecent;
+  return notEmptyEmail(person) ? greater(currentRecent, person.lastSeen) : currentRecent;
 }
 
 const mostRecent = peopleArr.reduce(notEmptyMostRecent, '');
@@ -293,9 +291,7 @@ console.log(mostRecent);
 
 ```js
 function fetchMessages(username) {
-  return fetch(`https://example.com/api/messages/${username}`).then(response =>
-    response.json()
-  );
+  return fetch(`https://example.com/api/messages/${username}`).then(response => response.json());
 }
 
 function getUsername(person) {

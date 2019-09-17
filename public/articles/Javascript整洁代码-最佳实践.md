@@ -198,7 +198,7 @@ function getUsers({ fields, fromDate, toDate }) {
 getUsers({
   fields: ['name', 'surname', 'email'],
   fromDate: '2019-01-01',
-  toDate: '2019-01-18'
+  toDate: '2019-01-18',
 });
 ```
 
@@ -257,7 +257,7 @@ Bad:
 const shapeConfig = {
   type: 'cube',
   width: 200,
-  height: null
+  height: null,
 };
 
 function createShape(config) {
