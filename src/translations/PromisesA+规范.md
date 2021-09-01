@@ -31,12 +31,12 @@
 
 一个 `Promise` 的当前状态必须是以下三种状态中的一种：等待（`pending`），完成（`fulfilled`）和拒绝（`rejected`）
 
-2.1.1. 当一个`promise`处于等待状态：  
+2.1.1 当一个`promise`处于等待状态：  
  &emsp;&emsp; 2.1.1.1 可以迁移到完成状态或者拒绝状态中的任意一个  
-2.1.2. 当一个 `promise` 处于完成状态  
+2.1.2 当一个 `promise` 处于完成状态  
  &emsp;&emsp; 2.1.2.1 一定不能再迁移到其他状态  
  &emsp;&emsp; 2.1.2.2 必须有一个值(`value`)，而且一定不能再改变  
-2.1.3. 当一个 `promise` 处于拒绝状态  
+2.1.3 当一个 `promise` 处于拒绝状态  
  &emsp;&emsp; 2.1.3.1 一定不能再迁移到其他状态  
  &emsp;&emsp; 2.1.3.2 必须有一个原因（`reason`），而且一定不能再改变
 
@@ -67,7 +67,8 @@ promise.then(onFulfilled, onRejected);
 &emsp;&emsp; 2.2.6.1 当`promise`是完成（`fulfilled`）状态，所有相应的`onFulfilled` 回调必须按照他们初始调用`then`方法的
 顺序执行  
 &emsp;&emsp; 2.2.6.2 当`promise`是拒绝（`rejected`）状态，所有相应的`onFulfilled` 回调必须按照他们初始调用`then`方法的顺
-序执行 2.2.7 `then` 方法必须返回一个`promise`对象 [3.3].
+序执行  
+2.2.7 `then` 方法必须返回一个`promise`对象 [3.3].
 
 ```js
 promise2 = promise1.then(onFulfilled, onRejected);
