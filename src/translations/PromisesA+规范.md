@@ -1,6 +1,6 @@
 # Promises/A+ 规范
 
- <!-- markdownlint-disable -->
+[原文地址](https://promisesaplus.com/)
 
 一个开放的，可交互的由开发者制定的 `JavaScript Promise` 标准。
 

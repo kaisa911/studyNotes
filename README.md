@@ -21,4 +21,4 @@
 - [函数式 JavaScript：如何在数字之外使用 Array.reduce()](https://github.com/kaisa911/studyNotes/blob/master/src/translations/%E5%87%BD%E6%95%B0%E5%BC%8FJS-%E7%94%A8reduce%E5%81%9A%E6%9B%B4%E5%A4%9A%E4%BA%8B%E6%83%85.md)
 - [Augmented Reality on the Web in 2019](https://github.com/kaisa911/studyNotes/blob/master/src/translations/2019%20%E5%B9%B4%E5%A2%9E%E5%BC%BA%E7%8E%B0%E5%AE%9E%E5%9C%A8%20web%20%E7%AB%AF%E7%9A%84%E5%BA%94%E7%94%A8.md)
 
-- [Promises/A+ 规范]()
+- [Promises/A+ 规范](https://github.com/kaisa911/studyNotes/blob/master/src/translations/PromisesA%2B%E8%A7%84%E8%8C%83.md)
