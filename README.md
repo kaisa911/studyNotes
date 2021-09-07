@@ -22,3 +22,4 @@
 - [Augmented Reality on the Web in 2019](https://github.com/kaisa911/studyNotes/blob/master/src/translations/2019%20%E5%B9%B4%E5%A2%9E%E5%BC%BA%E7%8E%B0%E5%AE%9E%E5%9C%A8%20web%20%E7%AB%AF%E7%9A%84%E5%BA%94%E7%94%A8.md)
 
 - [Promises/A+ 规范](https://github.com/kaisa911/studyNotes/blob/master/src/translations/PromisesA%2B%E8%A7%84%E8%8C%83.md)
+- [ES2022 特性：类静态初始化块](https://github.com/kaisa911/studyNotes/blob/master/src/translations/class-static-initialization-blocks.md)
