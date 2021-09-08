@@ -119,8 +119,7 @@ class ColorEnum extends Enum {
   static _ = this.collectStaticFields(); // (A)
 
   static logColors() {
-    for (const enumKey of this.enumKeys) {
-      // (B)
+    for (const enumKey of this.enumKeys) { // (B)
       console.log(enumKey);
     }
   }
@@ -133,4 +132,66 @@ ColorEnum.logColors();
 // 'blue'
 ```
 
+我们需要收集静态字段，以便我们可以迭代枚举条目的键（B 行），这是创建所有静态字段后的最后一步。我们再次使用一种解决方法（A 行）。静态块会更优雅。
+
+## 3.详细内容
+
+静态块的细节是相对合乎逻辑的（相对于更复杂的实例成员规则）：
+
+- 每个类可以有多个静态块
+- 静态块的执行与静态字段初始值设定项的执行交错​​执行。
+- 超类的静态成员在子类的静态成员之前执行。
+
+以下代码演示了这些规则：
+
+```js
+class SuperClass {
+  static superField1 = console.log('superField1');
+  static {
+    assert.equal(this, SuperClass);
+    console.log('static block 1 SuperClass');
+  }
+  static superField2 = console.log('superField2');
+  static {
+    console.log('static block 2 SuperClass');
+  }
+}
+
+class SubClass extends SuperClass {
+  static subField1 = console.log('subField1');
+  static {
+    assert.equal(this, SubClass);
+    console.log('static block 1 SubClass');
+  }
+  static subField2 = console.log('subField2');
+  static {
+    console.log('static block 2 SubClass');
+  }
+}
+
+// Output:
+// 'superField1'
+// 'static block 1 SuperClass'
+// 'superField2'
+// 'static block 2 SuperClass'
+// 'subField1'
+// 'static block 1 SubClass'
+// 'subField2'
+// 'static block 2 SubClass'
+```
+
+## 4.支持类静态块的引擎
+
+- V8：在 v9.4.146 中未标记
+- SpiderMonkey：在 v92 中的标志后面，意图在 v93 中添加 
+- TypeScrpt：v4.4
+
 ## 5.JavaScript是否变得很像Java或一团糟
+
+这是一个小功能，不会与其他功能竞争。我们已经可以通过带有 static _ = ... 解决方法的字段运行静态代码。静态块意味着不再需要这种解决方法。
+
+除此之外，类只是 JavaScript 程序员的众多工具之一。我们中的一些人使用它，其他人不使用它，并且有很多替代方案。即使是使用类的 JavaScript 代码也经常使用函数，并且往往是轻量级的。
+
+## 6.结论
+
+类静态块是一个相对简单的特性，它完善了类的静态特性。粗略地说，它是实例构造函数的静态版本。当我们必须设置多个静态字段时，它主要有用。
